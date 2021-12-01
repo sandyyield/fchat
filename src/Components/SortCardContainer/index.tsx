@@ -9,8 +9,6 @@ const style: CSSProperties = {
 }
 
 export const SortCardContainer = () => {
-
-
     const SetInitRandArr = (len: number) => {
         let arr: Array<{ id: number, text: string }> = [];
         for (let i = 1; i <= len; i++) {
