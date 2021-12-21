@@ -6,7 +6,7 @@ import { ItemTypes } from '../../Types'
  * box组件
  */
 
-const style: CSSProperties = {
+const b_style: CSSProperties = {
     border: '1px dashed gray',
     backgroundColor: 'white',
     padding: '0.5rem 1rem',
@@ -58,7 +58,8 @@ export const Box: FC<BoxProps> = ({ name }) => {
 
 
     return (
-        <div ref={drag} style={{ ...style, opacity }}>
+        //这里拓展运算符在chrome49 报错是什么情况  Uncaught SyntaxError: Unexpected token ...
+        <div ref={drag} style={{ ...b_style, opacity }}>
             {name}
         </div>
     )

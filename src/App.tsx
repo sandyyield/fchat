@@ -9,13 +9,15 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import { HashRouter } from 'react-router-dom'
+import { Setting } from './pages/Setting';
 
 function App() {
   return (
     <div className="App">
       <HashRouter>
         <DndProvider backend={HTML5Backend}>
-          <Home />
+          {/* <Home /> */}
+          <Setting />
         </DndProvider>
       </HashRouter>
     </div>
