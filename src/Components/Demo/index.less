@@ -1,0 +1,27 @@
+.box {
+  width: 100%;
+  /* 由于 content 会另起一行，影响样式的话，height 设置为具体的值能够避免高度变高的状况 */
+  height: 100%;
+  /* 设置元素两端对齐 */
+  text-align: justify;
+}
+
+/* 这里的伪元素必定要加上，否则span元素不能两端对齐 */			
+.box:after {
+  content: "";
+  display: inline-block;
+  overflow: hidden;
+  width: 100%;
+}
+    
+.box span {
+  width: 50px;
+  height: 50px;
+  /* 设置盒子为行内块 */
+  display: inline-block;
+  background-color: skyblue;
+  /* 设置盒子内元素水平居中 */
+  text-align: center;
+  /* 设置盒子内容垂直居中 */
+  line-height: 50px;
+}

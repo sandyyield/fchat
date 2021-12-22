@@ -1,6 +1,7 @@
-import { Button, Divider, InputNumber, message } from "antd";
-import React, { CSSProperties, ReactElement, useState } from "react";
-import { debounce } from "../../utils/debounce";
+import { Button, Divider, Input, InputNumber, message } from "antd";
+import React, { ChangeEventHandler, CSSProperties, ReactElement, ReactNode, useEffect, useState } from "react";
+import { CloseOutlined, ArrowLeftOutlined } from '@ant-design/icons';
+import './index.less';
 
 interface RectInfoProps {
     posx: number,
@@ -9,94 +10,178 @@ interface RectInfoProps {
     heigth: number,
 }
 
-const style: CSSProperties = {
-    // display:"flex",
-    position: "relative",
-    width: '50%',
-    height: '500px',
-    backgroundColor: "white",
-    textAlign: "center"
-}
 
-const itemStyle: CSSProperties = {
-    position: "absolute", textAlign: "center", left: "40%", top: "10rem"
-}
-
-const posStyle: CSSProperties = {
-    // position: "relative",
-    // width: "200px",
-    // left: "0px",
-    // top: '30%',
-    // marginLeft: 'auto',
-    // marginRight: 'auto',
-    // backgroundColor: "gray"
-
-}
 
 declare global {
     interface Window {
         native: {
-            hello: (str: string) => Promise<string>
+            hello: (str: string) => Promise<string>,
+            saveRect: (json: string) => Promise<void>,
+            hidePage: () => Promise<void>,
+            getRect: () => Promise<string>, //返回rectjson
+            setRect: (x: string, y: string, h: string, w: string) => Promise<void>, //设置红框线
         }
     }
 }
 
+interface Rect {
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+}
+
+const size = "large";
+const width = "120px"
+const leftFormatStyle: CSSProperties = {
+    textAlign: "left",
+    marginLeft: "64px",
+    position: "relative",
+    marginTop: "24px"
+}
+const fontStyle: CSSProperties = {
+    // fontSize: "xx-large"
+
+}
+
+
 export const RectInfo: React.FC<RectInfoProps> = (props) => {
 
-    // const [rect, setRect] = useState<RectInfoProps | null>(props)
+    const initState = { x: 0, y: 0, h: 600, w: 800 };
 
-    const [x, setX] = useState(props.posx);
-    const [y, setY] = useState(props.posy);
-    const [h, setH] = useState(props.heigth);
-    const [w, setW] = useState(props.weight);
+    const [rect, setRect] = useState<Rect>(initState);
 
 
-    const size = "large";
+    useEffect(() => {
+        const fn = async () => {
+            if (window.native) {
+                // await window.native.hidePage();
+                //初始化填充rect
+                const rectJ = await window.native.getRect();
+                const rect: Rect = JSON.parse(rectJ);
+                setRect(rect);
+            }
+        }
+        fn.call(this);
+        return () => { }
+    }, [])
 
-    const handleClick = () => {
+    /**
+     * 保存
+     */
+    const handleSave = async () => {
         // window.native.hello('123').then((res: string) => console.log(res)).then(() => message.success('保存成功', 1));
-        message.success('保存成功', 1);
+        if (window.native) {
+            await window.native.saveRect(JSON.stringify(rect))
+            message.success('保存成功', 1)
+        }
+        else {
+            message.error('保存异常，请使用收银端打开', 1);
+        }
+    }
 
+    /**
+     * 恢复默认值
+     */
+    const handleRestore = async () => {
+        setRect({ ...initState })
+        if (window.native) {
+            await window.native.saveRect(JSON.stringify(initState));
+        }
+        else {
+            message.error('重置异常，请使用收银端打开', 1)
+        }
+        message.success('重置成功', 1);
+    }
+
+    /**
+     * 返回 
+     */
+    const handleReturn = async () => {
+        if (window.native) {
+            await window.native.hidePage();
+        }
+        else {
+            message.error('返回异常，请使用收银端打开', 1);
+        }
+        console.log('返回成功，已最小化到后台');
+    }
+
+    const handleSetW = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const w = +e.target.value;
+        const h = w * 0.75;
+        const r = { ...rect, w, h };
+        setRect(r);
+        setUiRect(r);
+    }
+
+    const handleSetH = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const h = +e.target.value;
+        const w = h / 0.75;
+        const r = { ...rect, w, h };
+        setRect(r);
+        setUiRect(r);
+    }
+    const handleSetX = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const r = { ...rect, x: +e.target.value }
+        setRect(r);
+        setUiRect(r);
+    }
+    const handleSetY = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const r = { ...rect, y: +e.target.value };
+        setRect(r)
+        setUiRect(r);
+    }
+
+    const setUiRect = async (r: Rect) => {
+        console.log(r);
+
+        if (window.native) {
+            await window.native.setRect(r.x + '', r.y + '', r.h + '', r.w + '');
+        }
     }
 
 
-    const handleRestore = () => {
-        message.success('恢复成功', 1)
-    }
-
-    const leftFormatStyle: CSSProperties = {
-        textAlign: "left",
-        marginLeft: "64px",
-        position: "relative",
-        marginTop: "24px"
-
-
-    }
     return (
-        <div style={{ display: "flex", flexDirection: "column" }}>
-            <h1 style={{ ...leftFormatStyle, marginTop: "64px", marginBottom: "0px" }}>AI图片设置</h1>
-            <Divider />
-            {/* 设置按钮 */}
-            <div style={{ ...leftFormatStyle, marginTop: "0px" }}>
-                <span>
-                    <Button type="default" size={size} onClick={handleRestore}>重置</Button>
-                </span>
-                <span style={{ ...leftFormatStyle, marginLeft: "16px" }}>
-                    <Button type="primary" size={size} onClick={handleClick}>保存</Button>
-                </span>
-            </div>
-
-            <div style={leftFormatStyle} >
-                <span>
-                    <label>起始坐标:</label>
-                    <InputNumber defaultValue={x} onChange={setX} size={size} style={{ marginLeft: "32px", }}></InputNumber>
-                    <InputNumber defaultValue={y} onChange={setY} size={size} style={{ marginLeft: "16px", }}></InputNumber>
-                </span>
-                <span style={{ marginLeft: "64px", }}>
-                    <label>切图大小:</label>
-                    <InputNumber defaultValue={w} onChange={setW} size={size} style={{ marginLeft: "32px", }}></InputNumber>
-                    <InputNumber defaultValue={h} onChange={setH} size={size} style={{ marginLeft: "16px", }}></InputNumber>
-                </span>
+        <div>
+            <div className="main">
+                <div className="top">
+                    <span className="topleft">
+                        <Button className="returnfont" onClick={handleReturn} icon={<ArrowLeftOutlined />} size={size} type="link" > 返回</Button>
+                    </span>
+                    <span className="titlefont">
+                        <label >AI图片设置</label>
+                    </span>
+                    <span className="topright">
+                        <span style={{ marginRight: "16px" }}>
+                            <Button className="resetfont" type="link" size={size} onClick={handleRestore}>重置默认值</Button>
+                        </span>
+                        <span style={{ marginLeft: "16px" }}>
+                            <Button className="savefont" type="link" size={size} onClick={handleSave}>保存</Button>
+                        </span>
+                    </span>
+                </div>
+                <Divider />
+                <div style={leftFormatStyle} >
+                    <span >
+                        <span className="startposfont">
+                            <label>起始坐标:</label>
+                        </span>
+                        <span className="inputspan">
+                            <Input className="input" type="number" suffix="X" value={rect.x} onChange={handleSetX} size={size} style={{ marginLeft: "32px", width }}></Input>
+                            <Input className="input" type="number" suffix="Y" value={rect.y} onChange={handleSetY} size={size} style={{ marginLeft: "16px", width }}></Input>
+                        </span>
+                    </span>
+                    <span style={{ marginLeft: "64px", }}>
+                        <span className="endposfont">
+                            <label>切图大小:</label>
+                        </span>
+                        <span className="inputspan">
+                            <Input className="input" type="number" suffix="宽" value={rect.w} onChange={handleSetW} size={size} style={{ marginLeft: "32px", width }}></Input>
+                            <Input className="input" type="number" suffix="高" value={rect.h} onChange={handleSetH} size={size} style={{ marginLeft: "16px", width }}></Input>
+                        </span>
+                    </span>
+                </div>
             </div>
         </div>
     )
