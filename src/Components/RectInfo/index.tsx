@@ -2,6 +2,7 @@ import { Button, Divider, Input, InputNumber, message } from "antd";
 import React, { ChangeEventHandler, CSSProperties, ReactElement, ReactNode, useEffect, useState } from "react";
 import { CloseOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import './index.less';
+import { VideoBox } from "../VideoBox";
 
 interface RectInfoProps {
     posx: number,
@@ -39,13 +40,20 @@ const leftFormatStyle: CSSProperties = {
     position: "relative",
     marginTop: "24px"
 }
+
+const OnBrowserStyle:CSSProperties ={
+    textAlign: "center",
+    position: "relative",
+    marginTop: "24px"
+}
+
 const fontStyle: CSSProperties = {
     // fontSize: "xx-large"
 
 }
 
 
-export const RectInfo: React.FC<RectInfoProps> = (props) => {
+export const RectInfo: React.FC<RectInfoProps | null> = (props) => {
 
     const initState = { x: 0, y: 0, h: 600, w: 800 };
 
@@ -142,6 +150,8 @@ export const RectInfo: React.FC<RectInfoProps> = (props) => {
     }
 
 
+
+
     return (
         <div>
             <div className="main">
@@ -162,18 +172,17 @@ export const RectInfo: React.FC<RectInfoProps> = (props) => {
                     </span>
                 </div>
                 <Divider />
-                <div style={leftFormatStyle} >
-                    <span >
-                        <span className="startposfont">
+                <div style={!window.native ? OnBrowserStyle: leftFormatStyle} >
+                    <span className="configspan">
+                        <span className="labelfont">
                             <label>起始坐标:</label>
                         </span>
                         <span className="inputspan">
                             <Input className="input" type="number" suffix="X" value={rect.x} onChange={handleSetX} size={size} style={{ marginLeft: "32px", width }}></Input>
                             <Input className="input" type="number" suffix="Y" value={rect.y} onChange={handleSetY} size={size} style={{ marginLeft: "16px", width }}></Input>
                         </span>
-                    </span>
-                    <span style={{ marginLeft: "64px", }}>
-                        <span className="endposfont">
+                        <span style={{ margin: "32px"}}></span>
+                        <span className="labelfont">
                             <label>切图大小:</label>
                         </span>
                         <span className="inputspan">
@@ -182,6 +191,7 @@ export const RectInfo: React.FC<RectInfoProps> = (props) => {
                         </span>
                     </span>
                 </div>
+                {!window.native ? <VideoBox /> : <></>}
             </div>
         </div>
     )
