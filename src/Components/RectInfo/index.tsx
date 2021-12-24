@@ -47,11 +47,6 @@ const OnBrowserStyle:CSSProperties ={
     marginTop: "24px"
 }
 
-const fontStyle: CSSProperties = {
-    // fontSize: "xx-large"
-
-}
-
 
 export const RectInfo: React.FC<RectInfoProps | null> = (props) => {
 
@@ -191,7 +186,8 @@ export const RectInfo: React.FC<RectInfoProps | null> = (props) => {
                         </span>
                     </span>
                 </div>
-                {!window.native ? <VideoBox /> : <></>}
+                {/* {!window.native ? <VideoBox url="fileC:\Users\Administrator\Documents\WeChat Files\withoutthelove\FileStorage\Video\2021-12\3b9ac9cdc21f40ad86fb9c0f46a8ab5f.mp4"/> : <></>} */}
+                {!window.native ? <VideoBox url="http://zhonglunnet041001.oss-cn-shanghai.aliyuncs.com/downloadfile/demo.mp4"/> : <></>}
             </div>
         </div>
     )

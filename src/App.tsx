@@ -10,14 +10,16 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import { HashRouter } from 'react-router-dom'
 import { Setting } from './pages/Setting';
+import { VideoBox } from './Components/VideoBox';
+
+const debugMode = true;
 
 function App() {
   return (
     <div className="App">
       <HashRouter>
         <DndProvider backend={HTML5Backend}>
-          {/* <Home /> */}
-          <Setting />
+          {!debugMode ? <Home /> : <Setting />}
         </DndProvider>
       </HashRouter>
     </div>
