@@ -42,57 +42,38 @@ export const VideoBox: FC<ReactFlvPlayerProps> = (props) => {
     // const videoRef = useRef() as RefObject<HTMLVideoElement>;
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    /**
-     * 加载播放器
-     */
-    // useEffect(() => {
-    //     const player = flv.createPlayer(
-    //         {
-    //             type: "flv",
-    //             isLive: false,
-    //             hasAudio: hasAudio,
-    //             hasVideo: hasVideo,
-    //             url: url,
-    //             ...props.flvMediaSourceOptions,
-    //         },
-    //         {
-    //             stashInitialSize: stashInitialSize,
-    //             enableStashBuffer: enableStashBuffer,
-    //             ...props.flvConfig,
-    //         }
-    //     );
-
-    //     player.attachMediaElement(videoRef.current!);
-    //     player.load();
-    //     player.play();
-    //     // player.on("error", (err) => {
-    //     //   props.errorCallback?.(err);
-    //     // });
-    // }, [null]);
+    let flvPlayer: flv.Player | null = null;
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        flvPlayer = flvPlayer ?? flv.createPlayer({
+            isLive: true,
+            type: 'mp4',
+            url,
+        });
         if (flv.isSupported()) {
             const videoElement = videoRef.current;
             try {
-                const flvPlayer = flv.createPlayer({
-                    isLive: true,
-                    type: 'mp4',
-                    url: 'http://mirror.aarnet.edu.au/pub/TED-talks/911Mothers_2010W-480p.mp4',
-
-                });
+                // const flvPlayer = flv.createPlayer({
+                //     isLive: false,
+                //     type: 'mp4',
+                //     url: 'http://zhonglunnet041001.oss-cn-shanghai.aliyuncs.com/downloadfile/demo.mp4',
+                // });
                 if (videoElement != null) {
-                    flvPlayer.attachMediaElement(videoElement);
+                    flvPlayer?.attachMediaElement(videoElement);
                 }
-                flvPlayer.load();
-                flvPlayer.play();
+                flvPlayer?.load();
+                console.log('init player');
+                console.log(flvPlayer);
+
+                flvPlayer?.play();
             } catch (e) {
                 console.error(e);
             }
         }
-
-
         return () => {
-
+            // flvPlayer?.pause()
+            flvPlayer?.unload();
         }
     }, [])
 
@@ -111,27 +92,18 @@ export const VideoBox: FC<ReactFlvPlayerProps> = (props) => {
     }
 
     const style: CSSProperties = {
-        width: "100px",
-        height: "200px"
+        position: "relative",
+        width: "100%"
+
     };
 
     return (
-        // <div className='videomain'>
-        //     <span className='videospan'>
-        <Fragment>
-            {browserIsSuppert() ? <Button onClick={handleOpenCreama}>打开视频流</Button> : '当前浏览器不支持此功能'}
-            <video ref={videoRef} controls={true} style={{ height, width }}></video>
-            {/* <video controls={false} ref={videoRef} style={style} src={_videoStream}></video> */}
-            {/* <video
-                controls={showControls}
-                muted={isMuted}
-                ref={videoRef}
-                style={{ height, width }}
-                {...props.videoProps}
-            /> */}
-        </Fragment>
-        //     </span>
-        // </div>
+        <span style={{ height, width, backgroundColor: "black" }}>
+            {/* {browserIsSuppert() ? <Button onClick={handleOpenCreama}>打开视频流</Button> : '当前浏览器不支持此功能'} */}
+            <span > 
 
+                <video ref={videoRef} controls={false} muted={true} style={{ width: "640px", height: "480px",backgroundColor: "blue"}}></video>
+            </span>
+        </span>
     )
 }

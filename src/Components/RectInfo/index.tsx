@@ -3,6 +3,7 @@ import React, { ChangeEventHandler, CSSProperties, ReactElement, ReactNode, useE
 import { CloseOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import './index.less';
 import { VideoBox } from "../VideoBox";
+import { ToastModal } from "../ToastModal";
 
 interface RectInfoProps {
     posx: number,
@@ -36,12 +37,12 @@ const size = "large";
 const width = "120px"
 const leftFormatStyle: CSSProperties = {
     textAlign: "left",
-    marginLeft: "64px",
+    marginLeft: "24px",
     position: "relative",
-    marginTop: "24px"
+    marginTop: "8px"
 }
 
-const OnBrowserStyle:CSSProperties ={
+const OnBrowserStyle: CSSProperties = {
     textAlign: "center",
     position: "relative",
     marginTop: "24px"
@@ -50,9 +51,17 @@ const OnBrowserStyle:CSSProperties ={
 
 export const RectInfo: React.FC<RectInfoProps | null> = (props) => {
 
-    const initState = { x: 0, y: 0, h: 600, w: 800 };
+    const initState = { x: 0, y: 0, h: 480, w: 640 };
 
     const [rect, setRect] = useState<Rect>(initState);
+
+    //modal state
+    const [visible, setVisible] = useState(false);
+
+    const [ModalMsg, setModalMsg] = useState<string[]>([]);
+    const titleMsg = "请合理设置";
+    const modalMsg1 = "x + 宽 < 640, y + 高 < 480";
+    const modalMsg2 = "建议x , y 为正整数";
 
 
     useEffect(() => {
@@ -63,17 +72,47 @@ export const RectInfo: React.FC<RectInfoProps | null> = (props) => {
                 const rectJ = await window.native.getRect();
                 const rect: Rect = JSON.parse(rectJ);
                 setRect(rect);
+
+                //init modal msg 
+                setModalMsg([`${titleMsg} : ${modalMsg1}' , ${modalMsg2}`]);
             }
         }
         fn.call(this);
         return () => { }
     }, [])
 
+    const showModal = () => setVisible(true);
+    const handleModalOk = () => setVisible(false);
+    const handleModalCancel = () => setVisible(false);
+
+
     /**
      * 保存
      */
     const handleSave = async () => {
         // window.native.hello('123').then((res: string) => console.log(res)).then(() => message.success('保存成功', 1));
+        //check 是否存在x+w > 640 & y + h > 480 的情况， 如果有 就弹个modal
+        if (rect.x + rect.w > 640 || rect.y + rect.h > 480) {
+
+            setModalMsg([modalMsg1]);
+            if (!window.native) {
+                showModal();
+            }
+            else {
+                message.warning(` 建议:${modalMsg1}`)
+            }
+            return;
+        }
+        if (rect.x < 0 || rect.y < 0 || rect.h < 0 || rect.w < 0) {
+            setModalMsg([modalMsg2]);
+            if (!window.native) {
+                showModal();
+            }
+            else {
+                message.warning(` 建议:${modalMsg2}`)
+            }
+            return;
+        }
         if (window.native) {
             await window.native.saveRect(JSON.stringify(rect))
             message.success('保存成功', 1)
@@ -112,7 +151,7 @@ export const RectInfo: React.FC<RectInfoProps | null> = (props) => {
 
     const handleSetW = (e: React.ChangeEvent<HTMLInputElement>) => {
         const w = +e.target.value;
-        const h = w * 0.75;
+        const h = Math.floor(w * 0.75 * 100) / 100;
         const r = { ...rect, w, h };
         setRect(r);
         setUiRect(r);
@@ -120,7 +159,7 @@ export const RectInfo: React.FC<RectInfoProps | null> = (props) => {
 
     const handleSetH = (e: React.ChangeEvent<HTMLInputElement>) => {
         const h = +e.target.value;
-        const w = h / 0.75;
+        const w = Math.floor(h / 0.75 * 100) / 100;
         const r = { ...rect, w, h };
         setRect(r);
         setUiRect(r);
@@ -147,8 +186,10 @@ export const RectInfo: React.FC<RectInfoProps | null> = (props) => {
 
 
 
+
     return (
         <div>
+            <ToastModal isModalVisible={visible} handleOk={handleModalOk} handleCancel={handleModalCancel} title="请检查输入的宽高" content={ModalMsg} />
             <div className="main">
                 <div className="top">
                     <span className="topleft">
@@ -166,17 +207,17 @@ export const RectInfo: React.FC<RectInfoProps | null> = (props) => {
                         </span>
                     </span>
                 </div>
-                <Divider />
-                <div style={!window.native ? OnBrowserStyle: leftFormatStyle} >
+                <Divider className="divider" />
+                <div style={!window.native ? OnBrowserStyle : leftFormatStyle} >
                     <span className="configspan">
                         <span className="labelfont">
                             <label>起始坐标:</label>
                         </span>
                         <span className="inputspan">
-                            <Input className="input" type="number" suffix="X" value={rect.x} onChange={handleSetX} size={size} style={{ marginLeft: "32px", width }}></Input>
+                            <Input className="input" type="number" suffix="X" value={rect.x} onChange={handleSetX} size={size} style={{ marginLeft: "32px", width }} ></Input>
                             <Input className="input" type="number" suffix="Y" value={rect.y} onChange={handleSetY} size={size} style={{ marginLeft: "16px", width }}></Input>
                         </span>
-                        <span style={{ margin: "32px"}}></span>
+                        <span style={{ margin: "32px" }}></span>
                         <span className="labelfont">
                             <label>切图大小:</label>
                         </span>
@@ -187,7 +228,12 @@ export const RectInfo: React.FC<RectInfoProps | null> = (props) => {
                     </span>
                 </div>
                 {/* {!window.native ? <VideoBox url="fileC:\Users\Administrator\Documents\WeChat Files\withoutthelove\FileStorage\Video\2021-12\3b9ac9cdc21f40ad86fb9c0f46a8ab5f.mp4"/> : <></>} */}
-                {!window.native ? <VideoBox url="http://zhonglunnet041001.oss-cn-shanghai.aliyuncs.com/downloadfile/demo.mp4"/> : <></>}
+                {!window.native ?
+                    <span className="video">
+
+                        <VideoBox url="http://zhonglunnet041001.oss-cn-shanghai.aliyuncs.com/downloadfile/demo.mp4" />
+                    </span>
+                    : <></>}
             </div>
         </div>
     )

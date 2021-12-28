@@ -1,11 +1,19 @@
 @debugbackgroundcolor: #cbec0c;
-@applybackgroundcolor: white;
+@applybackgroundcolor: #fff;
 @usefont: PingFangSC-Regular;
+@m-font-family:'Microsoft YaHei UI', 'Microsoft YaHei', BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, 'Helvetica Neue', Helvetica, Arial, 'Hiragino Sans GB', 'Source Han Sans CN', sans-serif;
 
 .main {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    font-family: @m-font-family;
+
+    .video {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
 
     .top {
         width: 100%;
@@ -13,17 +21,19 @@
         /* 设置元素两端对齐 */
         // text-align: center;
         display: flex;
+        flex-direction: row;
         background-color: @applybackgroundcolor;
         position: relative;
-        justify-content: space-between;
-        margin-top: 24px;
+        // justify-content: space-between;
+        justify-content:space-between;
+        margin-top: 20px;
 
         // justify-content: center;
         .titlefont {
             // width: 125px;
             width: auto;
             height: 32px;
-            font-family: @usefont;
+            font-family:@m-font-family;
             font-size: 24px;
             color: #461111;
             line-height: 32px;
@@ -33,17 +43,19 @@
 
         .topleft {
             position: relative;
-            margin-left: 32px;
+            margin-left: 8px;
             display: inline-block;
             height: 100%;
-            line-height: 100%;
+            // line-height: 100%;
+            margin-top: -2px;
+            margin-bottom: 2px;
 
             // margin-top: 4px;
             .returnfont {
                 // width: 44px;
                 width: auto;
                 height: 24px;
-                font-family: @usefont;
+                font-family:@m-font-family;
                 font-size: 22px;
                 color: #1890FF;
                 letter-spacing: 0;
@@ -59,31 +71,40 @@
             display: inline-block;
             height: 100%;
             line-height: 100%;
-            border: 1px;
+            // border: 1px;
+             margin-top: -6px;
+             margin-bottom: 6px;
 
             .resetfont {
                 width: 100px;
                 height: 28px;
-                font-family: @usefont;
+                font-family: @m-font-family;
                 font-size: 22px;
                 color: #1890FF;
                 letter-spacing: 0;
                 text-align: center;
                 font-weight: 400;
+                
             }
 
             .savefont {
                 width: 40px;
                 height: 28px;
-                font-family: @usefont;
+                font-family: @m-font-family;
                 font-size: 22px;
                 color: #1890FF;
                 letter-spacing: 0;
                 text-align: center;
                 font-weight: 400;
+                margin-right: 12px;
             }
         }
 
+    }
+
+    .divider{
+        margin-top: 20px;
+        margin-bottom: 20px;
     }
 
     .configspan {
@@ -91,13 +112,13 @@
         .labelfont {
             width: 100px;
             height: 28px;
-            font-family: PingFangSC-Regular;
+            font-family: @m-font-family;
             font-size: 20px;
             color: #222222;
             font-weight: 400;
         }
 
-        
+
 
         .input {
             width: 160px;
@@ -112,6 +133,8 @@
             top: -5px;
         }
     }
+
+    
 
     // .inputspan.input {
     //     width: 160px;
