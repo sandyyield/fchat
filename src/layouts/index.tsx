@@ -7,17 +7,15 @@ import { Left } from "./Left";
 export const Layouts = () => {
 
     return (
-        <div className="layout">
-            <Layout>
-                <Head />
-                <Layout >
-                    <Left />
-                    <Layout style={{ padding: '0 24px 24px' }}>
-                        <Context />
-                    </Layout>
+        <Layout style={{ minHeight: "100vh" }}>
+            <Head />
+            <Layout >
+                <Left />
+                <Layout style={{ padding: '0 24px 24px' }}>
+                    <Context />
                 </Layout>
-                <Foot />
             </Layout>
-        </div>
+            <Foot />
+        </Layout>
     );
 }

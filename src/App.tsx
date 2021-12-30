@@ -8,6 +8,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { HashRouter } from 'react-router-dom'
 import { Setting } from './pages/Setting';
 import { Layouts } from './layouts';
+import { Home } from './pages/Home';
 
 
 const debugMode = true;

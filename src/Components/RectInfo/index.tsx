@@ -4,6 +4,9 @@ import { CloseOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import './index.less';
 import { VideoBox } from "../VideoBox";
 import { ToastModal } from "../ToastModal";
+import { useDebounced } from "../../utils";
+import { debounce } from "../../utils/debounce";
+import { random } from "nanoid";
 
 interface RectInfoProps {
     posx: number,
@@ -22,6 +25,12 @@ declare global {
             hidePage: () => Promise<void>,
             getRect: () => Promise<string>, //返回rectjson
             setRect: (x: string, y: string, h: string, w: string) => Promise<void>, //设置红框线
+        }
+        nativeSync: {
+            setRect: (x: string, y: string, h: string, w: string) => void, //设置红框线
+            getRect:() => string,
+            hidePage:() => void,
+            saveRect: (json: string) => void,
         }
     }
 }
@@ -55,6 +64,8 @@ export const RectInfo: React.FC<RectInfoProps | null> = (props) => {
 
     const [rect, setRect] = useState<Rect>(initState);
 
+    const debounceRect = useDebounced(rect, 1000);
+
     //modal state
     const [visible, setVisible] = useState(false);
 
@@ -65,11 +76,16 @@ export const RectInfo: React.FC<RectInfoProps | null> = (props) => {
 
 
     useEffect(() => {
-        const fn = async () => {
-            if (window.native) {
+        try {
+
+            if (window.nativeSync) {
                 // await window.native.hidePage();
                 //初始化填充rect
-                const rectJ = await window.native.getRect();
+                const rectJ = window.nativeSync.getRect();
+                if (!rectJ) {
+                    console.log('effect getrect is empty');
+                    return () => { };
+                }
                 const rect: Rect = JSON.parse(rectJ);
                 setRect(rect);
 
@@ -77,9 +93,28 @@ export const RectInfo: React.FC<RectInfoProps | null> = (props) => {
                 setModalMsg([`${titleMsg} : ${modalMsg1}' , ${modalMsg2}`]);
             }
         }
-        fn.call(this);
+        catch (e) {
+            console.log(e);
+
+        }
+
         return () => { }
     }, [])
+
+
+    useEffect(() => {
+        // setUiRect(debounceRect);
+        console.log('???')
+        setUiRectSync(debounceRect);
+    }, [debounceRect])
+
+    // const SetRectLog = (v:Rect) =>{
+    //     console.log(`set v ${Math.random()}`);
+    //     setRect(v)
+    // }
+
+
+    // const debounceSetRect = (v: Rect, delay = 1000) => debounce(() => SetRectLog(v),delay)()//setRect(UseDebounced(v))
 
     const showModal = () => setVisible(true);
     const handleModalOk = () => setVisible(false);
@@ -89,59 +124,75 @@ export const RectInfo: React.FC<RectInfoProps | null> = (props) => {
     /**
      * 保存
      */
-    const handleSave = async () => {
-        // window.native.hello('123').then((res: string) => console.log(res)).then(() => message.success('保存成功', 1));
-        //check 是否存在x+w > 640 & y + h > 480 的情况， 如果有 就弹个modal
-        if (rect.x + rect.w > 640 || rect.y + rect.h > 480) {
+    const handleSave = () => {
+        try {
 
-            setModalMsg([modalMsg1]);
-            if (!window.native) {
-                showModal();
+            console.log(rect);
+            
+            // window.native.hello('123').then((res: string) => console.log(res)).then(() => message.success('保存成功', 1));
+            //check 是否存在x+w > 640 & y + h > 480 的情况， 如果有 就弹个modal
+            if (+rect.x + +rect.w > 640 || +rect.y + +rect.h > 480) {
+
+                setModalMsg([modalMsg1]);
+                if (!window.native) {
+                    showModal();
+                }
+                else {
+                    message.warning(` 建议:${modalMsg1}`)
+                }
+                return;
+            }
+            if (+rect.x < 0 || +rect.y < 0 || +rect.h < 0 || +rect.w < 0) {
+                setModalMsg([modalMsg2]);
+                if (!window.native) {
+                    showModal();
+                }
+                else {
+                    message.warning(` 建议:${modalMsg2}`)
+                }
+                return;
+            }
+            if (window.nativeSync) {
+                window.nativeSync.saveRect(JSON.stringify(rect))
+                message.success('保存成功', 1)
             }
             else {
-                message.warning(` 建议:${modalMsg1}`)
+                message.error('保存异常，请使用收银端打开', 1);
             }
-            return;
         }
-        if (rect.x < 0 || rect.y < 0 || rect.h < 0 || rect.w < 0) {
-            setModalMsg([modalMsg2]);
-            if (!window.native) {
-                showModal();
-            }
-            else {
-                message.warning(` 建议:${modalMsg2}`)
-            }
-            return;
-        }
-        if (window.native) {
-            await window.native.saveRect(JSON.stringify(rect))
-            message.success('保存成功', 1)
-        }
-        else {
-            message.error('保存异常，请使用收银端打开', 1);
+        catch (e) {
+            console.log(e);
+
         }
     }
 
     /**
      * 恢复默认值
      */
-    const handleRestore = async () => {
-        setRect({ ...initState })
-        if (window.native) {
-            await window.native.saveRect(JSON.stringify(initState));
+    const handleRestore = () => {
+        try {
+
+            setRect({ ...initState })
+            if (window.nativeSync) {
+                window.nativeSync.saveRect(JSON.stringify(initState));
+            }
+            else {
+                message.error('重置异常，请使用收银端打开', 1)
+            }
+            message.success('重置成功', 1);
         }
-        else {
-            message.error('重置异常，请使用收银端打开', 1)
+        catch (e) {
+            console.log(e);
+
         }
-        message.success('重置成功', 1);
     }
 
     /**
      * 返回 
      */
     const handleReturn = async () => {
-        if (window.native) {
-            await window.native.hidePage();
+        if (window.nativeSync) {
+            await window.nativeSync.hidePage();
         }
         else {
             message.error('返回异常，请使用收银端打开', 1);
@@ -150,41 +201,59 @@ export const RectInfo: React.FC<RectInfoProps | null> = (props) => {
     }
 
     const handleSetW = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const w = +e.target.value;
+        const w = Math.floor(+e.target.value * 100) / 100;
         const h = Math.floor(w * 0.75 * 100) / 100;
         const r = { ...rect, w, h };
         setRect(r);
-        setUiRect(r);
+        // setUiRect(r);
     }
 
     const handleSetH = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const h = +e.target.value;
+        const h = Math.floor(+e.target.value * 100) / 100;
         const w = Math.floor(h / 0.75 * 100) / 100;
         const r = { ...rect, w, h };
         setRect(r);
-        setUiRect(r);
+        // setUiRect(r);
     }
     const handleSetX = (e: React.ChangeEvent<HTMLInputElement>) => {
         const r = { ...rect, x: +e.target.value }
+        
         setRect(r);
-        setUiRect(r);
+        // setUiRect(r);
     }
     const handleSetY = (e: React.ChangeEvent<HTMLInputElement>) => {
         const r = { ...rect, y: +e.target.value };
-        setRect(r)
-        setUiRect(r);
+        setRect(r);
+        // setUiRect(r);
     }
 
-    const setUiRect = async (r: Rect) => {
-        console.log(r);
 
-        if (window.native) {
-            await window.native.setRect(r.x + '', r.y + '', r.h + '', r.w + '');
+    const setUiRect = (r: Rect) => {
+        try {
+
+            if (window.nativeSync) {
+                window.nativeSync.setRect(r.x + '', r.y + '', r.h + '', r.w + '');
+            }
+        }
+        catch (e) {
+            console.log(e);
+
         }
     }
 
+    //同步设置线条
+    const setUiRectSync = (r: Rect) => {
+        try {
 
+            if (window.nativeSync) {
+                window.nativeSync.setRect(r.x + '', r.y + '', r.h + '', r.w + '');
+            }
+        }
+        catch (e) {
+            console.log(e);
 
+        }
+    }
 
 
     return (

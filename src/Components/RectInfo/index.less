@@ -1,7 +1,7 @@
 @debugbackgroundcolor: #cbec0c;
 @applybackgroundcolor: #fff;
 @usefont: PingFangSC-Regular;
-@m-font-family:'Microsoft YaHei UI', 'Microsoft YaHei', BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, 'Helvetica Neue', Helvetica, Arial, 'Hiragino Sans GB', 'Source Han Sans CN', sans-serif;
+@m-font-family: 'Microsoft YaHei UI', 'Microsoft YaHei', BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, 'Helvetica Neue', Helvetica, Arial, 'Hiragino Sans GB', 'Source Han Sans CN', sans-serif;
 
 .main {
     display: flex;
@@ -25,7 +25,7 @@
         background-color: @applybackgroundcolor;
         position: relative;
         // justify-content: space-between;
-        justify-content:space-between;
+        justify-content: space-between;
         margin-top: 20px;
 
         // justify-content: center;
@@ -33,7 +33,7 @@
             // width: 125px;
             width: auto;
             height: 32px;
-            font-family:@m-font-family;
+            font-family: @m-font-family;
             font-size: 24px;
             color: #461111;
             line-height: 32px;
@@ -55,7 +55,7 @@
                 // width: 44px;
                 width: auto;
                 height: 24px;
-                font-family:@m-font-family;
+                font-family: @m-font-family;
                 font-size: 22px;
                 color: #1890FF;
                 letter-spacing: 0;
@@ -72,8 +72,8 @@
             height: 100%;
             line-height: 100%;
             // border: 1px;
-             margin-top: -6px;
-             margin-bottom: 6px;
+            margin-top: -6px;
+            margin-bottom: 6px;
 
             .resetfont {
                 width: 100px;
@@ -84,7 +84,7 @@
                 letter-spacing: 0;
                 text-align: center;
                 font-weight: 400;
-                
+
             }
 
             .savefont {
@@ -102,13 +102,13 @@
 
     }
 
-    .divider{
+    .divider {
         margin-top: 20px;
         margin-bottom: 20px;
     }
 
     .configspan {
-        
+
         .labelfont {
             width: 100px;
             height: 28px;
@@ -126,6 +126,15 @@
             background: #FFFFFF;
             border: 1.5px solid #CCCCCC;
             border-radius: 4px;
+
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+            }
+
+            input[type="number"] {
+                -moz-appearance: textfield;
+            }
         }
 
         .inputspan {
@@ -134,7 +143,7 @@
         }
     }
 
-    
+
 
     // .inputspan.input {
     //     width: 160px;
