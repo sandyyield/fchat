@@ -15,6 +15,7 @@
     "@types/react-dnd": "^3.0.2",
     "@types/react-dom": "^17.0.0",
     "antd": "^4.17.1",
+    "babel-polyfill": "^6.26.0",
     "craco-less": "^1.20.0",
     "dva": "^2.4.1",
     "eslint-plugin-react-hooks": "^4.3.0",

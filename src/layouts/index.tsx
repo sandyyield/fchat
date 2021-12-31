@@ -8,7 +8,7 @@ export const Layouts = () => {
 
     return (
         <Layout style={{ minHeight: "100vh" }}>
-            <Head />
+            {/* <Head /> */}
             <Layout >
                 <Left />
                 <Layout style={{ padding: '0 24px 24px' }}>
