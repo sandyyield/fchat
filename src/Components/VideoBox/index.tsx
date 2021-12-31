@@ -1,6 +1,5 @@
-import { Button } from 'antd';
 import flv from 'flv.js';
-import React, { CSSProperties, useRef, RefObject, useEffect, FC, Fragment } from 'react';
+import React, { useRef, useEffect, FC, Fragment } from 'react';
 import './index.less'
 
 
@@ -29,13 +28,13 @@ export const VideoBox: FC<ReactFlvPlayerProps> = (props) => {
     const {
         height,
         width,
-        isLive,
-        hasAudio,
-        hasVideo,
-        showControls,
-        enableStashBuffer,
-        stashInitialSize,
-        isMuted,
+        // isLive,
+        // hasAudio,
+        // hasVideo,
+        // showControls,
+        // enableStashBuffer,
+        // stashInitialSize,
+        // isMuted,
         url,
     } = props;
 
@@ -66,7 +65,9 @@ export const VideoBox: FC<ReactFlvPlayerProps> = (props) => {
                 console.log('init player');
                 console.log(flvPlayer);
 
-                flvPlayer?.play();
+                if(browserIsSuppert()){
+                    flvPlayer?.play();
+                }
             } catch (e) {
                 console.error(e);
             }
@@ -77,33 +78,31 @@ export const VideoBox: FC<ReactFlvPlayerProps> = (props) => {
         }
     }, [])
 
-    let _videoStream: MediaStream | null = null;
-
+    
     /**
      * 浏览器是否支持
      */
     const browserIsSuppert = () => "mediaDevices" in navigator && "getUserMedia" in navigator.mediaDevices ? true : false;
+    
+    // let _videoStream: MediaStream | null = null;
+    // const handleOpenCreama = async () => {
+    //     const videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+    //     console.log(videoStream);
+    //     _videoStream = videoStream;
+    //     // videoStream.
+    // }
 
-    const handleOpenCreama = async () => {
-        const videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
-        console.log(videoStream);
-        _videoStream = videoStream;
-        // videoStream.
-    }
-
-    const style: CSSProperties = {
-        position: "relative",
-        width: "100%"
-
-    };
+  
 
     return (
-        <span style={{ height, width, backgroundColor: "black" }}>
-            {/* {browserIsSuppert() ? <Button onClick={handleOpenCreama}>打开视频流</Button> : '当前浏览器不支持此功能'} */}
-            <span > 
+        <Fragment>
+            <span style={{ height, width, backgroundColor: "black" }}>
+                {/* {browserIsSuppert() ? <Button onClick={handleOpenCreama}>打开视频流</Button> : '当前浏览器不支持此功能'} */}
+                <span >
 
-                <video ref={videoRef} controls={false} muted={true} style={{ width: "640px", height: "480px",backgroundColor: "blue"}}></video>
+                    <video ref={videoRef} controls={false} muted={true} style={{ width: "640px", height: "480px", backgroundColor: "blue" }}></video>
+                </span>
             </span>
-        </span>
+        </Fragment>
     )
 }

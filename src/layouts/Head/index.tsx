@@ -1,4 +1,4 @@
-import { Button, Menu } from "antd";
+import {  Menu } from "antd";
 import { Header } from "antd/lib/layout/layout"
 
 export const Head = () => {

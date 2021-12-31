@@ -1,4 +1,3 @@
-import { DemoCss } from "../../Components/Demo"
 import { RectInfo } from "../../Components/RectInfo"
 
 

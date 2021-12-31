@@ -1,16 +1,13 @@
-import { Breadcrumb, Button } from "antd"
+import { Breadcrumb } from "antd"
 import { Content } from "antd/lib/layout/layout"
-import { CSSProperties, Fragment, useEffect } from "react"
+import { CSSProperties, Fragment } from "react"
 import {
-
     Routes,
     Route,
 } from "react-router-dom"
-import { BoxContainer } from "../../Components/BoxContainer"
-import Dustbin from "../../Components/Dustbin"
+import { SetScaleRect } from "../../Components/SetScaleRect"
 import { SortCardContainer } from "../../Components/SortCardContainer"
 import { ComponentLibrary } from "../../pages/ComponentLibrary"
-import { ConnectLst } from "../../pages/ConnectLst"
 import { DustbinBox } from "../../pages/DustbinBox"
 import { Home } from "../../pages/Home"
 import { Setting } from "../../pages/Setting"
@@ -39,11 +36,11 @@ export const Context = () => {
                     <Routes>
                         <Route path="/" element={<p>404</p>}></Route>
                         <Route path="/page/debug/setting" element={<Setting />} />
+                        <Route path="/page/debug/SetScaleRect" element={<SetScaleRect />} />
                         <Route path="/page/debug/sortcard" element={<SortCardContainer />} />
                         <Route path="/page/debug/dustbin" element={<DustbinBox />} />
-                        
-                        <Route path="/page/home/" element={<Home />}></Route>
 
+                        <Route path="/page/home/" element={<Home />}></Route>
                         <Route path="/component" element={<ComponentLibrary />}></Route>
                     </Routes>
                 </div>

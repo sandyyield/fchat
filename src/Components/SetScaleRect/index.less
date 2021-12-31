@@ -1,0 +1,148 @@
+@debugbackgroundcolor: #cbec0c;
+@applybackgroundcolor: #fff;
+@usefont: PingFangSC-Regular;
+@m-font-family: 'Microsoft YaHei UI', 'Microsoft YaHei', BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, 'Helvetica Neue', Helvetica, Arial, 'Hiragino Sans GB', 'Source Han Sans CN', sans-serif;
+
+.setscalerect {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: @m-font-family;
+
+    .picturebox {
+        position: relative;
+        background-color: aqua;
+        text-align: center;
+    }
+
+    .top {
+        width: 100%;
+        // height: 100%;
+        /* 设置元素两端对齐 */
+        // text-align: center;
+        display: flex;
+        flex-direction: row;
+        background-color: @applybackgroundcolor;
+        position: relative;
+        // justify-content: space-between;
+        justify-content: space-between;
+        margin-top: 20px;
+
+        // justify-content: center;
+        .titlefont {
+            // width: 125px;
+            width: auto;
+            height: 32px;
+            font-family: @m-font-family;
+            font-size: 24px;
+            color: #461111;
+            line-height: 32px;
+            font-weight: 400;
+        }
+
+
+        .topleft {
+            position: relative;
+            margin-left: 8px;
+            display: inline-block;
+            height: 100%;
+            // line-height: 100%;
+            margin-top: -2px;
+            margin-bottom: 2px;
+
+            // margin-top: 4px;
+            .returnfont {
+                // width: 44px;
+                width: auto;
+                height: 24px;
+                font-family: @m-font-family;
+                font-size: 22px;
+                color: #1890FF;
+                letter-spacing: 0;
+                line-height: 24px;
+                font-weight: 400;
+            }
+        }
+
+        .topright {
+            position: relative;
+            width: auto;
+            margin-right: 32px;
+            display: inline-block;
+            height: 100%;
+            line-height: 100%;
+            // border: 1px;
+            margin-top: -6px;
+            margin-bottom: 6px;
+
+            .resetfont {
+                width: 100px;
+                height: 28px;
+                font-family: @m-font-family;
+                font-size: 22px;
+                color: #1890FF;
+                letter-spacing: 0;
+                text-align: center;
+                font-weight: 400;
+
+            }
+
+            .savefont {
+                width: 40px;
+                height: 28px;
+                font-family: @m-font-family;
+                font-size: 22px;
+                color: #1890FF;
+                letter-spacing: 0;
+                text-align: center;
+                font-weight: 400;
+                margin-right: 12px;
+            }
+        }
+
+    }
+
+    .divider {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .configspan {
+
+        .labelfont {
+            width: 100px;
+            height: 28px;
+            font-family: @m-font-family;
+            font-size: 20px;
+            color: #222222;
+            font-weight: 400;
+        }
+
+
+
+        .input {
+            width: 160px;
+            height: 52px;
+            background: #FFFFFF;
+            border: 1.5px solid #CCCCCC;
+            border-radius: 4px;
+
+            //去掉上下箭头
+            // input::-webkit-outer-spin-button,
+            // input::-webkit-inner-spin-button {
+            //     -webkit-appearance: none;
+            // }
+
+            // input[type="number"] {
+            //     -moz-appearance: textfield;
+            // }
+        }
+
+        .inputspan {
+            position: relative;
+            top: -5px;
+        }
+    }
+
+}
+

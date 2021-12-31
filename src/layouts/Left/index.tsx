@@ -1,17 +1,12 @@
 import { Layout, Menu } from 'antd';
 import SubMenu from 'antd/lib/menu/SubMenu';
-import { BugFilled } from '@ant-design/icons';
+import { BugFilled, AppstoreFilled, PieChartFilled } from '@ant-design/icons';
 import './style.less'
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 
 const { Sider } = Layout;
 export const Left = () => {
-
-    const navigate = useNavigate();
-
-    const handleClick = () => navigate('/');
-
 
     return (
         <Sider width={200} className='sider'>
@@ -24,25 +19,24 @@ export const Left = () => {
             >
                 <SubMenu key="debug" icon={<BugFilled />} title="Debug">
                     <Menu.Item key="1">
-                        <NavLink to="/page/debug/setting">AISettingPage</NavLink>
+                        <NavLink to="/page/debug/SetScaleRect">SetScaleRect</NavLink>
                     </Menu.Item>
                     <Menu.Item key="2">
                         <NavLink to="/page/debug/sortcard">SortCard</NavLink>
                     </Menu.Item>
-                    {/* <Menu.Item key="3">
-                        <NavLink to="/page/debug/connectlst">ConnectLst</NavLink>
-                    </Menu.Item> */}
+                    <Menu.Item key="3">
+                        <NavLink to="/page/debug/setting">AISettingPage</NavLink>
+                    </Menu.Item>
                     <Menu.Item key="4">
                         <NavLink to="/page/debug/dustbin">Dustbin</NavLink>
                     </Menu.Item>
-
                 </SubMenu>
-                <SubMenu key="home" icon={<BugFilled />} title="Home" onTitleClick={handleClick}>
-                    <Menu.Item key="1">
-                        <NavLink to="/maincontent">MainContent</NavLink>
-                    </Menu.Item>
-                </SubMenu>
-                <SubMenu key="component" icon={<BugFilled />} title="Component" onTitleClick={() => navigate("/component")} />
+                <Menu.Item key="home" icon={<PieChartFilled />}>
+                    <NavLink to="/">MainContent</NavLink>
+                </Menu.Item>
+                <Menu.Item key="component" icon={<AppstoreFilled />} title="Component" >
+                    <NavLink to="/component">Component</NavLink>
+                </Menu.Item>
             </Menu>
         </Sider>
     )
