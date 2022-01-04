@@ -21,6 +21,7 @@ export const ImgCropper: React.FC<ImgCropperProps> = (props) => {
         if(src){
             setImg(src)
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const cropperRef = useRef<HTMLImageElement>(null);
