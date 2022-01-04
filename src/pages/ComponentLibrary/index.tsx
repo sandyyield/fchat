@@ -1,7 +1,7 @@
 import { Button } from "antd"
 import { forwardRef } from "react";
 import { Count } from "../../Components/Count/indext"
-import { ImgCropper } from "../../Components/ImgCropper";
+// import { ImgCropper } from "../../Components/ImgCropper";
 import { UserForm } from "../../Components/UserForm";
 import { useModal } from "../../hooks/useModal"
 
@@ -22,7 +22,7 @@ export const ComponentLibrary = () => {
             <Button onClick={open}>useModal-bug</Button>
             {/* <Button onClick={handleShowUseModal}>useModal</Button> */}
             <UserForm />
-            <ImgCropper src={""}  />
+            {/* <ImgCropper src={""}  /> */}
         </div>
     )
 

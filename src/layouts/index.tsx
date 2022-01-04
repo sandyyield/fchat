@@ -1,7 +1,7 @@
 import { Layout } from "antd";
 import { Context } from "./Context";
 import { Foot } from "./Foot";
-import { Head } from "./Head";
+// import { Head } from "./Head";
 import { Left } from "./Left";
 
 export const Layouts = () => {

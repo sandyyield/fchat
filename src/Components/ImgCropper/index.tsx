@@ -25,8 +25,8 @@ export const ImgCropper: React.FC<ImgCropperProps> = (props) => {
 
     const cropperRef = useRef<HTMLImageElement>(null);
     const onCrop = () => {
-        const imageElement: any = cropperRef?.current;
-        const cropper: any = imageElement?.cropper;
+        // const imageElement: any = cropperRef?.current;
+        // const cropper: any = imageElement?.cropper;
     };
 
     const onCropEnd = () => {

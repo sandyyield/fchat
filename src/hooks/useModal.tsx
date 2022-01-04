@@ -13,8 +13,13 @@ export const useModal = (modalProps: ModalProps, Slot: React.FC<any>) => {
 
     useEffect(() => {
         console.log('use modal');
-        
     }, [])
+
+
+    useEffect(() => {
+        console.log(`visiable value listener: ${visiable}`);
+        
+    }, [visiable])
 
     const open = () => setVisiable(true);
     const close = () => setVisiable(false);
@@ -24,7 +29,7 @@ export const useModal = (modalProps: ModalProps, Slot: React.FC<any>) => {
 
         const ref = useRef<FormInstance>();
 
-        const ok = () => ref.current?.submit();
+        // const ok = () => ref.current?.submit();
 
         return (
             <Modal
