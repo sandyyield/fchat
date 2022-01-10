@@ -3,6 +3,11 @@ const CracoLessPlugin = require('craco-less');
 const { getThemeVariables } = require('antd/dist/theme');
 
 module.exports = {
+  babel: {
+    plugins: [
+      ["@babel/plugin-proposal-decorators", { legacy: true }]
+    ]
+  },
   plugins: [
     {
       plugin: CracoLessPlugin,
@@ -10,7 +15,7 @@ module.exports = {
         lessLoaderOptions: {
           lessOptions: {
             // modifyVars: { '@primary-color': '#1DA57A' },
-            modifyVars:getThemeVariables({
+            modifyVars: getThemeVariables({
               // dark: true,
             }),
             javascriptEnabled: true,
@@ -19,4 +24,6 @@ module.exports = {
       },
     },
   ],
+
 };
+
