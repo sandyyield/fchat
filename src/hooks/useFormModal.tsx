@@ -1,7 +1,7 @@
 import type { ModalProps } from 'antd';
 import { Modal } from 'antd';
 import type { FormInstance } from 'antd/es/form';
-import React, { forwardRef, ReactElement, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 
 
 
@@ -17,12 +17,11 @@ type ModalRefType<T> = { open: (initProps?: Partial<T>) => void; close: () => vo
 
 const useFormModal = function <T>(modalProps: Omit<Partial<ModalProps>, 'confirmLoading' | 'visible'>, Slot: React.ComponentType<T>) {
 
-    const modalRef = useRef<ModalRefType<T>>();
+    // const modalRef = useRef<ModalRefType<T>>();
 
     //观察下是否每次都刷新
     useEffect(() => {
         console.log('is init');
-
     }, [])
 
     const [loading, setLoading] = useState(false);

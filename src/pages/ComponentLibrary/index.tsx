@@ -4,10 +4,14 @@ import { Count } from "../../Components/Count/indext"
 // import { ImgCropper } from "../../Components/ImgCropper";
 import UserForm from "../../Components/UserForm";
 import useFormModal from "../../hooks/useFormModal";
+import ES6Exmple from "../../Components/ES6Exmple";
 
 export const ComponentLibrary = () => {
 
+
     const { open, FormModal: UserModal } = useFormModal({ title: '新建用户' }, forwardRef(UserForm));
+
+    const { open: open2, FormModal: ES6ExmpleModal } = useFormModal({ title: 'ES6+语法糖尝试板' }, forwardRef(ES6Exmple));
 
     return (
         <div>
@@ -17,7 +21,11 @@ export const ComponentLibrary = () => {
             <Button onClick={open}>useModal</Button>
             <UserModal />
 
-            {/* <ImgCropper src={""}  /> */}
+            <Button onClick={open2}>ES6Exmple</Button>
+            <ES6ExmpleModal />
+
+
+            
         </div>
     )
 

@@ -3,11 +3,11 @@ const CracoLessPlugin = require('craco-less');
 const { getThemeVariables } = require('antd/dist/theme');
 
 module.exports = {
-  babel: {
-    plugins: [
-      ["@babel/plugin-proposal-decorators", { legacy: true }]
-    ]
-  },
+  // babel: {
+  //   plugins: [
+  //     ["@babel/plugin-proposal-decorators", { legacy: true }]
+  //   ]
+  // },
   plugins: [
     {
       plugin: CracoLessPlugin,
